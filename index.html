@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protected Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#fafaf9] h-screen flex items-center justify-center">
+
+    <div class="bg-white p-8 rounded-xl shadow-lg border border-[#e7e5e4] max-w-sm w-full text-center">
+        <h2 class="text-2xl font-bold text-[#78350f] mb-4">Restricted Access</h2>
+        <p class="text-[#57534e] mb-6 text-sm">Please enter the password to view SMOKEJUMPER winery.</p>
+        
+        <input type="password" id="password" class="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-[#ca8a04]" placeholder="Password">
+        
+        <button onclick="checkPassword()" class="w-full bg-[#78350f] text-white py-3 rounded-lg font-bold hover:bg-[#451a03] transition-colors">
+            Enter
+        </button>
+        
+        <p id="error" class="text-red-600 text-sm mt-3 hidden">Incorrect password.</p>
+    </div>
+
+    <script>
+        function checkPassword() {
+            const password = document.getElementById("password").value;
+            const error = document.getElementById("error");
+
+            // CHANGE "yosemite" TO YOUR DESIRED PASSWORD BELOW
+            if (password === "2367583b262c216a6542203e46") {
+                // If correct, redirect to the real page
+                window.location.href = "2367583b262c216a6542203e46.html";
+            } else {
+                error.classList.remove("hidden");
+            }
+        }
+
+        // Allow pressing "Enter" key to submit
+        document.getElementById("password").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                checkPassword();
+            }
+        });
+    </script>
+
+</body>
+</html>
