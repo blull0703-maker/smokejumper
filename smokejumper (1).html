@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMOKEJUMPER Winery - Fire. Regeneration. Legacy.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --charcoal: #1a1614;
+            --ember: #d84315;
+            --ash: #9e9e9e;
+            --smoke: #e0e0e0;
+            --flame: #ff6f00;
+            --soil: #3e2723;
+            --bronze: #bf8040;
+            --cream: #faf8f3;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background: var(--charcoal);
+            color: var(--cream);
+            overflow-x: hidden;
+        }
+        
+        /* Animated ember particles */
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
+            50% { transform: translateY(-100px) translateX(20px); opacity: 0.8; }
+        }
+        
+        .ember-particle {
+            position: fixed;
+            width: 3px;
+            height: 3px;
+            background: var(--flame);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 1;
+            box-shadow: 0 0 10px var(--ember);
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            position: relative;
+            background: 
+                url('hero_wine.png') center center / cover no-repeat;
+            overflow: hidden;
+        }
+
+        /* Left-anchored dark vignette for text legibility */
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                105deg,
+                rgba(13, 11, 10, 0.92) 0%,
+                rgba(13, 11, 10, 0.75) 35%,
+                rgba(13, 11, 10, 0.25) 60%,
+                transparent 100%
+            );
+            pointer-events: none;
+        }
+
+        /* Bottom vignette to anchor scroll indicator */
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 180px;
+            background: linear-gradient(to top, rgba(13,11,10,0.7) 0%, transparent 100%);
+            pointer-events: none;
+        }
+        
+        .hero-content {
+            text-align: left;
+            z-index: 10;
+            padding: 2rem 4rem;
+            max-width: 580px;
+            animation: fadeInUp 1.2s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .logo {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(4rem, 15vw, 12rem);
+            letter-spacing: 0.15em;
+            line-height: 0.9;
+            background: linear-gradient(135deg, var(--flame) 0%, var(--ember) 50%, var(--bronze) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 60px rgba(216, 67, 21, 0.3);
+            margin-bottom: 1rem;
+            animation: glow 3s ease-in-out infinite;
+        }
+        
+        @keyframes glow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+        
+        .tagline {
+            font-size: clamp(0.9rem, 2vw, 1.4rem);
+            letter-spacing: 0.3em;
+            color: var(--bronze);
+            text-transform: uppercase;
+            font-weight: 400;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out 0.5s forwards;
+        }
+        
+        .hero-cycle {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1rem, 2.5vw, 1.6rem);
+            letter-spacing: 0.25em;
+            color: var(--ash);
+            line-height: 1.8;
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out 0.8s forwards;
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            animation: fadeIn 1.5s ease-out 1s forwards, bounce 2s ease-in-out 2s infinite;
+            cursor: pointer;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+        
+        .scroll-indicator::before {
+            content: '↓';
+            display: block;
+            font-size: 2rem;
+            color: var(--bronze);
+        }
+        
+        /* Story Section */
+        .story {
+            padding: 8rem 2rem;
+            background: 
+                linear-gradient(180deg, #0d0b0a 0%, var(--soil) 50%, #0d0b0a 100%);
+            position: relative;
+        }
+        
+        .story::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(180deg, var(--charcoal) 0%, transparent 100%);
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            letter-spacing: 0.1em;
+            color: var(--ember);
+            margin-bottom: 3rem;
+            text-align: center;
+            line-height: 1;
+        }
+        
+        .story-grid {
+            display: grid;
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+        
+        .story-block {
+            border-left: 3px solid var(--bronze);
+            padding-left: 2rem;
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+        
+        .story-block.visible {
+            animation: slideIn 0.8s ease-out forwards;
+        }
+        
+        .story-block:nth-child(1).visible { animation-delay: 0.2s; }
+        .story-block:nth-child(2).visible { animation-delay: 0.4s; }
+        .story-block:nth-child(3).visible { animation-delay: 0.6s; }
+        
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .story-block h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            letter-spacing: 0.15em;
+            color: var(--flame);
+            margin-bottom: 1rem;
+        }
+        
+        .story-block p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--smoke);
+        }
+        
+        /* Process Section */
+        .process {
+            padding: 8rem 2rem;
+            background: var(--charcoal);
+            position: relative;
+        }
+        
+        .process-timeline {
+            max-width: 1100px;
+            margin: 4rem auto 0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+        
+        .process-step {
+            position: relative;
+            padding: 2.5rem;
+            background: linear-gradient(135deg, rgba(62, 39, 35, 0.4) 0%, rgba(26, 22, 20, 0.6) 100%);
+            border: 1px solid rgba(191, 128, 64, 0.2);
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .process-step.visible {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        .process-step:nth-child(1).visible { animation-delay: 0.1s; }
+        .process-step:nth-child(2).visible { animation-delay: 0.2s; }
+        .process-step:nth-child(3).visible { animation-delay: 0.3s; }
+        .process-step:nth-child(4).visible { animation-delay: 0.4s; }
+        .process-step:nth-child(5).visible { animation-delay: 0.5s; }
+        .process-step:nth-child(6).visible { animation-delay: 0.6s; }
+        
+        .process-step:hover {
+            transform: translateY(-10px);
+            border-color: var(--bronze);
+            box-shadow: 0 20px 40px rgba(216, 67, 21, 0.2);
+        }
+        
+        .step-number {
+            font-family: 'Cinzel', serif;
+            font-size: 4rem;
+            color: var(--ember);
+            line-height: 1;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+        
+        .step-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            letter-spacing: 0.1em;
+            color: var(--bronze);
+            margin-bottom: 1rem;
+        }
+        
+        .step-description {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--smoke);
+        }
+        
+        /* Inline link styling for step descriptions */
+        .step-description a {
+            color: var(--bronze);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color 0.3s ease;
+        }
+        
+        .step-description a:hover {
+            color: var(--flame);
+        }
+        
+        /* Wine Section */
+        .wines {
+            padding: 8rem 2rem;
+            background: 
+                radial-gradient(ellipse at 50% 50%, rgba(216, 67, 21, 0.08) 0%, transparent 70%),
+                linear-gradient(180deg, var(--charcoal) 0%, #0d0b0a 100%);
+        }
+        
+        .wine-showcase {
+            max-width: 600px;
+            margin: 4rem auto 0;
+        }
+        
+        .wine-card {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: linear-gradient(180deg, rgba(62, 39, 35, 0.3) 0%, transparent 100%);
+            border-top: 2px solid var(--bronze);
+            transition: all 0.4s ease;
+            opacity: 0;
+        }
+        
+        .wine-card.visible {
+            animation: fadeIn 1s ease-out forwards;
+        }
+        
+        .wine-card:hover {
+            background: linear-gradient(180deg, rgba(62, 39, 35, 0.5) 0%, transparent 100%);
+        }
+        
+        .wine-image {
+            max-width: 280px;
+            width: 100%;
+            height: auto;
+            margin: 0 auto 2rem;
+            display: block;
+        }
+        
+        .vintage {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            color: var(--flame);
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+        
+        .varietal {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(1.4rem, 3vw, 2rem);
+            letter-spacing: 0.2em;
+            color: var(--bronze);
+            margin-bottom: 2rem;
+        }
+        
+        .tasting-notes {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--smoke);
+            font-style: italic;
+            margin-bottom: 1.5rem;
+        }
+        
+        .source-notes {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--smoke);
+            margin-bottom: 1.5rem;
+        }
+        
+        .medallion-note {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--smoke);
+            margin-bottom: 1.5rem;
+        }
+        
+        .kicker-note {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: var(--bronze);
+            margin-top: 1rem;
+        }
+        
+        /* Science Section */
+        .science {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, #0d0b0a 0%, var(--soil) 50%, #0d0b0a 100%);
+        }
+
+        .science-cards {
+            max-width: 1100px;
+            margin: 5rem auto 0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .science-card {
+            padding: 3rem 2.5rem 2.5rem;
+            border: 1px solid rgba(191, 128, 64, 0.2);
+            border-top: 2px solid var(--bronze);
+            background: linear-gradient(160deg, rgba(62,39,35,0.3) 0%, rgba(26,22,20,0.6) 100%);
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .science-card.visible {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .science-card:nth-child(1).visible { animation-delay: 0.1s; }
+        .science-card:nth-child(2).visible { animation-delay: 0.25s; }
+        .science-card:nth-child(3).visible { animation-delay: 0.4s; }
+
+        .science-claim {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.15rem, 1.8vw, 1.35rem);
+            font-style: italic;
+            line-height: 1.7;
+            color: var(--cream);
+            flex-grow: 1;
+            margin-bottom: 2rem;
+        }
+
+        .science-attribution {
+            display: block;
+            font-family: 'Cinzel', serif;
+            font-size: 0.72rem;
+            letter-spacing: 0.08em;
+            color: var(--bronze);
+            line-height: 1.6;
+            text-decoration: none;
+            border-top: 1px solid rgba(191, 128, 64, 0.2);
+            padding-top: 1.25rem;
+            transition: color 0.3s ease;
+        }
+
+        .science-attribution:hover {
+            color: var(--flame);
+        }
+
+        .science-attribution em {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 0.85rem;
+            letter-spacing: 0.02em;
+        }
+
+        @media (max-width: 900px) {
+            .science-cards {
+                grid-template-columns: 1fr;
+                max-width: 600px;
+            }
+        }
+        
+        /* Footer */
+        footer {
+            padding: 4rem 2rem 2rem;
+            background: var(--charcoal);
+            text-align: center;
+            border-top: 1px solid rgba(191, 128, 64, 0.2);
+        }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .footer-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            letter-spacing: 0.15em;
+            color: var(--bronze);
+            margin-bottom: 2rem;
+        }
+        
+        .footer-text {
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: var(--ash);
+            margin-bottom: 2rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-links a {
+            color: var(--bronze);
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--flame);
+        }
+        
+        .copyright {
+            font-size: 0.8rem;
+            color: var(--ash);
+            letter-spacing: 0.05em;
+        }
+        
+        /* ==================== */
+        /* MOBILE RESPONSIVE    */
+        /* ==================== */
+        
+        @media (max-width: 1024px) {
+            .process-timeline {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero {
+                height: 100svh;
+                min-height: 500px;
+            }
+            
+            .hero-content {
+                padding: 1.5rem 2rem;
+                max-width: 100%;
+            }
+            
+            .hero-cycle {
+                letter-spacing: 0.15em;
+            }
+            
+            .story, .process, .wines, .science {
+                padding: 5rem 1.25rem;
+            }
+            
+            .story-block {
+                padding-left: 1.25rem;
+            }
+            
+            .story-block p {
+                font-size: 1rem;
+            }
+            
+            .process-timeline {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                padding: 0 0.5rem;
+            }
+            
+            .process-step {
+                padding: 2rem 1.5rem;
+            }
+            
+            .process-step:hover {
+                transform: none;
+            }
+            
+            .step-number {
+                font-size: 3rem;
+            }
+            
+            .wine-showcase {
+                margin-top: 2rem;
+            }
+            
+            .wine-card {
+                padding: 2rem 1.25rem;
+            }
+            
+            .wine-image {
+                max-width: 220px;
+            }
+            
+            .impact-stats {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+        
+        /* ==================== */
+        /* MODAL LIGHTBOX       */
+        /* ==================== */
+
+        .process-step {
+            cursor: pointer;
+        }
+
+        .step-hint {
+            display: inline-block;
+            margin-top: 1.2rem;
+            font-size: 0.78rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--bronze);
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .process-step:hover .step-hint {
+            opacity: 1;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(13, 11, 10, 0.92);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-inner {
+            position: relative;
+            max-width: 860px;
+            width: 100%;
+            background: linear-gradient(160deg, rgba(62,39,35,0.5) 0%, rgba(26,22,20,0.95) 100%);
+            border: 1px solid rgba(191,128,64,0.25);
+            overflow: hidden;
+            transform: translateY(24px) scale(0.97);
+            transition: transform 0.35s ease;
+        }
+
+        .modal-overlay.open .modal-inner {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 420px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .modal-body {
+            padding: 2rem 2.5rem 2.5rem;
+        }
+
+        .modal-step-number {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            letter-spacing: 0.25em;
+            color: var(--ember);
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            letter-spacing: 0.1em;
+            color: var(--bronze);
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .modal-description {
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--smoke);
+        }
+
+        .modal-description a {
+            color: var(--bronze);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            background: rgba(26,22,20,0.8);
+            border: 1px solid rgba(191,128,64,0.3);
+            color: var(--bronze);
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .modal-close:hover {
+            background: var(--ember);
+            color: var(--cream);
+            border-color: var(--ember);
+        }
+
+        @media (max-width: 768px) {
+            .modal-image {
+                height: 240px;
+            }
+            .modal-body {
+                padding: 1.5rem;
+            }
+            .modal-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .logo {
+                letter-spacing: 0.08em;
+            }
+            
+            .tagline {
+                letter-spacing: 0.15em;
+                font-size: 0.85rem;
+            }
+            
+            .hero-cycle {
+                font-size: 0.85rem;
+                letter-spacing: 0.1em;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Ember particles -->
+    <div id="ember-container"></div>
+
+    <!-- Lightbox Modal -->
+    <div class="modal-overlay" id="modal" role="dialog" aria-modal="true">
+        <div class="modal-inner">
+            <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
+            <img class="modal-image" id="modal-image" src="" alt="">
+            <div class="modal-body">
+                <div class="modal-step-number" id="modal-step"></div>
+                <h3 class="modal-title" id="modal-title"></h3>
+                <p class="modal-description" id="modal-desc"></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="logo">SMOKEJUMPER</h1>
+            <p class="tagline">BY FRESNO STATE</p>
+            <div class="hero-cycle">
+                <p>SALVAGE. ENRICH. CULTIVATE.</p>
+                <p>CRAFT. SAVOR.</p>
+                <p>RETURN</p>
+            </div>
+        </div>
+        <div class="scroll-indicator"></div>
+    </section>
+    
+    <!-- Story -->
+    <section class="story">
+        <div class="container">
+            <h2 class="section-title">From Ash<br>to Excellence</h2>
+            
+            <div class="story-grid">
+                <div class="story-block">
+                    <h3>Born from Fire</h3>
+                    <p>When California burns, the US Forest Service and CalFire clear thousands of acres of charred timber. SMOKEJUMPER wines begin there — with Fresno State students converting fire-scar slash into biochar, a carbon-rich soil amendment that turns scorched earth into fertile ground.</p>
+                </div>
+                
+                <div class="story-block">
+                    <h3>Cultivated by Students</h3>
+                    <p>Every vine in the SMOKEJUMPER program is tended by Fresno State viticulture students who amend vineyard soil with biochar, improving water retention by 10–15% and producing wines of uncommon depth and mineral complexity. This isn't a classroom exercise. It's a working winery.</p>
+                </div>
+                
+                <div class="story-block">
+                    <h3>Commemorated by Artists</h3>
+                    <p>Each vintage ships with a limited-edition medallion hand-carved from fire-affected wood by Fresno State art students. Real wood from real fires — a tactile record of the specific blaze that started the cycle.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Process -->
+    <section class="process">
+        <div class="container">
+            <h2 class="section-title">The Cycle</h2>
+        </div>
+        
+        <div class="process-timeline">
+            <div class="process-step" data-step="01" data-title="Salvage" data-img="salvage.png" data-desc="CalFire and US Forest Service crews clear fire scars across California. What most see as waste, we see as the starting line.">
+                <div class="step-number">01</div>
+                <h3 class="step-title">Salvage</h3>
+                <p class="step-description">CalFire and US Forest Service crews clear fire scars across California. What most see as waste, we see as the starting line.</p>
+                <span class="step-hint">↑ View photo</span>
+            </div>
+            
+            <div class="process-step" data-step="02" data-title="Enrich" data-img="enrich.png" data-desc="Students process salvaged wood into biochar and work it into vineyard soil — locking carbon underground while building a living terroir.">
+                <div class="step-number">02</div>
+                <h3 class="step-title">Enrich</h3>
+                <p class="step-description">Students process salvaged wood into biochar and work it into vineyard soil — locking carbon underground while building a living terroir.</p>
+                <span class="step-hint">↑ View photo</span>
+            </div>
+            
+            <div class="process-step" data-step="03" data-title="Cultivate" data-img="cultivate.png" data-desc="Grapes develop slowly in biochar-amended earth, drawing mineral complexity from soil that remembers fire.">
+                <div class="step-number">03</div>
+                <h3 class="step-title">Cultivate</h3>
+                <p class="step-description">Grapes develop slowly in biochar-amended earth, drawing mineral complexity from soil that remembers fire.</p>
+                <span class="step-hint">↑ View photo</span>
+            </div>
+            
+            <div class="process-step" data-step="04" data-title="Craft" data-img="craft.png" data-desc="Small-lot wines are vinified by Fresno State enology students under professional mentorship — fermented with intention, aged with patience.">
+                <div class="step-number">04</div>
+                <h3 class="step-title">Craft</h3>
+                <p class="step-description">Small-lot wines are vinified by Fresno State enology students under professional mentorship — fermented with intention, aged with patience.</p>
+                <span class="step-hint">↑ View photo</span>
+            </div>
+            
+            <div class="process-step" data-step="05" data-title="Savor" data-img="savor.png" data-desc="Each vintage debuts at an annual release gala that doubles as a fundraiser for <a href='https://theholdfast.earth/2367583b262c216a6542203e46' target='_blank' rel='noopener noreferrer'>The Holdfast</a>, a planned climate resilience campus and museum of wildfire in Madera County.">
+                <div class="step-number">05</div>
+                <h3 class="step-title">Savor</h3>
+                <p class="step-description">Each vintage debuts at an annual release gala that doubles as a fundraiser for <a href="https://theholdfast.earth/2367583b262c216a6542203e46" target="_blank" rel="noopener noreferrer">The Holdfast</a>, a planned climate resilience campus and museum of wildfire in Madera County.</p>
+                <span class="step-hint">↑ View photo</span>
+            </div>
+            
+            <div class="process-step" data-step="06" data-title="Return" data-img="return.png" data-desc="When vines reach the end of their productive life, students process the wood back into biochar. The cycle doesn't just repeat — it compounds.">
+                <div class="step-number">06</div>
+                <h3 class="step-title">Return</h3>
+                <p class="step-description">When vines reach the end of their productive life, students process the wood back into biochar. The cycle doesn't just repeat — it compounds.</p>
+                <span class="step-hint">↑ View photo</span>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Wines -->
+    <section class="wines">
+        <div class="container">
+            <h2 class="section-title">The Product</h2>
+        </div>
+        
+        <div class="wine-showcase">
+            <div class="wine-card">
+                <img src="smokejumper.jpg" alt="SMOKEJUMPER: Garnet" class="wine-image">
+                <div class="vintage">2025 Vintage: Garnet</div>
+                <div class="varietal">Phoenix Blend - Red</div>
+                <p class="tasting-notes">Dark cherry, charred oak, smoked vanilla, earth. A wine that tastes like it came from somewhere — because it did.</p>
+                <p class="source-notes">Biochar source: Garnet Fire salvage, Sierra National Forest</p>
+                <p class="medallion-note">Medallion: Hand-carved from fire-affected sugar pine</p>
+                <p class="kicker-note"><i>Limited allocation. Released exclusively at annual SMOKEJUMPER gala.</i></p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Science -->
+    <section class="science">
+        <div class="container">
+            <h2 class="section-title">The Science</h2>
+        </div>
+
+        <div class="science-cards">
+            <div class="science-card">
+                <p class="science-claim">Biochar-amended vineyard soils retained significantly more moisture than untreated plots during peak summer drought — with effects still measurable ten years after application.</p>
+                <a class="science-attribution" href="https://doi.org/10.1016/j.scitotenv.2022.158225" target="_blank" rel="noopener noreferrer">
+                    — Baronti et al., <em>Science of the Total Environment</em>, 2022<br>
+                    10-year field trial, Vitis vinifera, Tuscany
+                </a>
+            </div>
+
+            <div class="science-card">
+                <p class="science-claim">Across more than 280 controlled experiments worldwide, biochar improves plant water use efficiency by nearly 20%.</p>
+                <a class="science-attribution" href="https://doi.org/10.1111/gcbb.12889" target="_blank" rel="noopener noreferrer">
+                    — Schmidt et al., <em>GCB Bioenergy</em>, 2021<br>
+                    Systematic review of 26 global meta-analyses
+                </a>
+            </div>
+
+            <div class="science-card">
+                <p class="science-claim">A California Pinot Noir trial using forest-residue biochar produced a 34% yield increase over six harvests — with positive return on investment by the second harvest and quality unchanged.</p>
+                <a class="science-attribution" href="https://pacificbiochar.com/oasis-vineyard-field-trial-with-biochar-and-compost-_-6th-harvest-report/" target="_blank" rel="noopener noreferrer">
+                    — Hunt et al., <em>Oasis Vineyard Field Trial</em>, 2024<br>
+                    Pacific Biochar / UC Riverside / CA Dept. of Water Resources
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">SMOKEJUMPER</div>
+            <p class="footer-text">
+                A program of The Holdfast Climate Resilience Campus<br>
+                Presented by Fresno State Winery<br>
+                Madera County, CA
+            </p>
+            <div class="footer-links">
+                <a href="https://theholdfast.earth/2367583b262c216a6542203e46">The Holdfast</a>
+                <a href="https://theholdfast.earth/2367583b262c216a6542203e46#master-plan:~:text=14-,The%20Forge,-The%20Forge%20Wine">Visit The Forge</a>
+                <a href="#">Partnership Opportunities</a>
+                <a href="mailto:lull@mail.fresnostate.edu">Contact</a>
+            </div>
+            <p class="copyright">
+                &copy; 2026 SMOKEJUMPER Winery, by Fresno State.
+            </p>
+        </div>
+    </footer>
+    
+    <script>
+        // Create floating ember particles
+        const emberContainer = document.getElementById('ember-container');
+        const particleCount = 30;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'ember-particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animation = `float ${Math.random() * 10 + 15}s ease-in-out infinite`;
+            particle.style.animationDelay = Math.random() * 5 + 's';
+            emberContainer.appendChild(particle);
+        }
+        
+        // Smooth scroll for scroll indicator
+        document.querySelector('.scroll-indicator').addEventListener('click', () => {
+            document.querySelector('.story').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Intersection Observer — animate elements only when scrolled into view
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.story-block, .process-step, .wine-card, .science-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // ========================
+        // MODAL LIGHTBOX SYSTEM
+        // ========================
+        const modal = document.getElementById('modal');
+        const modalImage = document.getElementById('modal-image');
+        const modalStep = document.getElementById('modal-step');
+        const modalTitle = document.getElementById('modal-title');
+        const modalDesc = document.getElementById('modal-desc');
+        const modalClose = document.getElementById('modal-close');
+
+        function openModal(step) {
+            modalImage.src = step.dataset.img;
+            modalImage.alt = step.dataset.title;
+            modalStep.textContent = `Step ${step.dataset.step}`;
+            modalTitle.textContent = step.dataset.title;
+            modalDesc.innerHTML = step.dataset.desc;
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        document.querySelectorAll('.process-step').forEach(step => {
+            step.addEventListener('click', () => openModal(step));
+        });
+
+        modalClose.addEventListener('click', closeModal);
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+</body>
+</html>
