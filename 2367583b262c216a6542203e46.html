@@ -5,8 +5,10 @@
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+
     <meta charset="UTF-8">
-       <!-- Keep it out of search indexes -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Keep it out of search indexes -->
 <meta name="robots" content="noindex, nofollow">
 
 <!-- Primary -->
@@ -53,11 +55,17 @@
         }
 
         body {
-            font-family: 'Cormorant Garamond', serif;
-            background: var(--charcoal);
-            color: var(--cream);
-            overflow-x: hidden;
-        }
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 21px;
+  line-height: 1.6;
+}
+h1, h2, h3, .display {
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.05em;   /* Cinzel breathes better with tracking */
+}
+
+/* Optional: prevent the font-swap shift */
+body { font-display: swap; }
         
         @keyframes float {
             0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
@@ -986,9 +994,9 @@
             <h1 class="logo">SMOKE<br>JUMPER</h1>
             <p class="tagline">BY FRESNO STATE</p>
             <div class="hero-cycle">
-                <p>SALVAGE. ENRICH. </p>
-                <p>CULTIVATE. CRAFT.</p>
-                <p>SAVOR. RETURN</p>
+                <p>SALVAGE. ENRICH. CULTIVATE.</p>
+                <p>CRAFT. SAVOR.</p>
+                <p>RETURN</p>
             </div>
         </div>
         <div class="scroll-indicator"></div>
